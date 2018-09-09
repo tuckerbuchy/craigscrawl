@@ -1,87 +1,76 @@
-// const cheerio = require('cheerio');
-// const fs = require('fs');
-const util = require('util');
-
-// // Wrap readfile to get a async/await version.
-// const readFile = util.promisify(fs.readFile);
-
-// async function parseHTML(page) {
-//   const data = await readFile(page);
-//   const $ = cheerio.load(data);
-
-// }
-// // parseHTML('html/sample.html');
-// parseHTML('html/apa.html');
-
-
+const util = require('util')
 const Nightmare = require('nightmare')
-const nightmare = Nightmare({ 
-	show: true 
+const RESULT_BATCH_SIZE = 120; // TODO: Infer batch size from the first query.
+
+function getCraigslistUrl(offset=0){
+	const craigslistUrl = 'https://vancouver.craigslist.ca/d/apts-housing-for-rent/search/apa?s=%s';
+	return util.format(craigslistUrl, offset);
+}
+
+Nightmare.action('crawlClHousingListings', function(done){
+	this.evaluate_now(() => {
+	  	const listingRows = document.querySelectorAll('.content ul.rows li.result-row');
+	  	let listings = [];
+	  	listingRows.forEach((listingRow) => {
+			let priceHtml = listingRow.querySelector('.result-price');
+			let price = null;
+			if (priceHtml) {
+				price = listingRow.querySelector('.result-price').innerText.replace('$', '');;
+			}
+
+			const listing = {
+				'data_pid': listingRow.getAttribute('data-pid'),
+				'url': listingRow.querySelector('.result-title').href,
+				'title': listingRow.querySelector('.result-title').innerText,
+				'price': price,
+				'post_datetime': listingRow.querySelector('.result-date').getAttribute('datetime')
+			}
+			listings.push(listing);
+		});
+		return listings;
+	}, done)
 })
 
-Nightmare.action('grabGeospatial', function(done){
+Nightmare.action('extractGeospatial', function(done){
 	this.evaluate_now(() => {
-		let map = document.querySelector('#map');
-		let geo = {
-		'lat' : map.getAttribute('data-latitude'),
-		'lon' : map.getAttribute('data-longitude')
+		const map = document.querySelector('#map');
+		const geo = {
+			'lat' : map.getAttribute('data-latitude'),
+			'lon' : map.getAttribute('data-longitude')
 		};
 		return geo;
 	}, done)
 })
 
+const nightmare = Nightmare({ 
+	show: true 
+})
+
+let pageListings = null;
 nightmare
-  .goto('https://vancouver.craigslist.ca/')
-  .click('a.apa')
-  .wait()
-  .evaluate(() => {
-  	const results = document.querySelectorAll('.content ul.rows li.result-row');
-  	let searchResults = [];
-  	results.forEach((result) => {
-		let priceHtml = result.querySelector('.result-price');
-		let price = null;
-		if (priceHtml) {
-			price = result.querySelector('.result-price').innerText.replace('$', '');;
-		}
-		let row = {
-			'data_pid': result.getAttribute('data-pid'),
-			'url': result.querySelector('.result-title').href,
-			'title': result.querySelector('.result-title').innerText,
-			'price': price
-		}
-		searchResults.push(row);
-	});
-	return searchResults;
-  })
-  .then(results => {
+  .goto(getCraigslistUrl(offset=400))
+  .crawlClHousingListings()
+  .then(listings => {
   	// For easier debugging
-  	clResults = results.slice(0, 5);
-  	//
+  	listings = listings.slice(0, 5);
   	return new Promise((resolve, reject) => {
-  		clResults.reduce(function(accumulator, clResult) {
+  		listings.reduce(function(accumulator, listing) {
 		  return accumulator.then(function(accumulator) {
-		    return nightmare.goto(clResult.url)
+		    return nightmare.goto(listing.url)
 		      	.wait('body')
-		      	.evaluate(() => {
-					let map = document.querySelector('#map');
-					let geo = {
-					'lat' : map.getAttribute('data-latitude'),
-					'lon' : map.getAttribute('data-longitude')
-					};
-					return geo;
-				})
+		      	.extractGeospatial()
 				.then((geo) => {
-					clResult['geo'] = geo;
+					listing['geo'] = geo;
 				});
 		  });
 		}, Promise.resolve(true)).then(() => {
-		    resolve(clResults);
+		    resolve(listings);
 		});
   	})
   })
-  .then((results) => {
-  	console.log("HELLO RESSULTS", results);
-
+  .then((listings) => {
+  	console.log(listings);
+  	pageListings = listings;
   })
   .catch(error => {
     console.error('Search failed:', error)
