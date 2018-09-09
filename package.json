@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/tuckerbuchy/craigslist-analytics/issues"
   },
-  "homepage": "https://github.com/tuckerbuchy/craigslist-analytics#readme"
+  "homepage": "https://github.com/tuckerbuchy/craigslist-analytics#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "nightmare": "^3.0.1"
+  }
 }
