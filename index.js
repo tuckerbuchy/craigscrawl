@@ -115,7 +115,7 @@ function crawlCraigslist(amount){
 	}, Promise.resolve());
 }
 
-crawlCraigslist(amount=2).then(() => {
+crawlCraigslist(amount=3).then(() => {
 	console.log(util.format("Crawled %d listings in total.", allListings.length));
 	fs.writeFile('listings_sample.json', JSON.stringify(allListings, null, 2), (err) => {
 		if (err) throw err;
