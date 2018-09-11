@@ -82,7 +82,9 @@ function getSomeCraigslistListings(offset=0, limit=RESULT_BATCH_SIZE) {
 	  	})
 	  })
 	  .then((listings) => {
-	  	return Promise.resolve(listings)
+	  	return nightmare.end().then(() => {
+        return Promise.resolve(listings)
+      });
 	  })
 	  .catch(error => {
 	    console.error('Search failed:', error)
@@ -94,7 +96,6 @@ function crawlCraigslist(amount){
 	let n = 0;
 	let listingJobs = [];
 	while (n < amount){
-		// const newListings = await getSomeCraigslistListings(n);
 		let remaining = amount - n;
 		let batchSize = remaining >= RESULT_BATCH_SIZE ? RESULT_BATCH_SIZE : remaining;
 		listingJob = {
@@ -103,7 +104,7 @@ function crawlCraigslist(amount){
 			offset: n
 		}
 		listingJobs.push(listingJob);
-		n += RESULT_BATCH_SIZE;
+		n += batchSize;
 	}
 
 	return listingJobs.reduce( ( promise, listingJob ) => {
@@ -115,7 +116,7 @@ function crawlCraigslist(amount){
 	}, Promise.resolve());
 }
 
-crawlCraigslist(amount=3).then(() => {
+crawlCraigslist(amount=15).then(() => {
 	console.log(util.format("Crawled %d listings in total.", allListings.length));
 	fs.writeFile('listings_sample.json', JSON.stringify(allListings, null, 2), (err) => {
 		if (err) throw err;
