@@ -2,7 +2,7 @@
 
 ## Example 
 ```node
-apartmentCrawler.crawlApartments(amount=2).then(allListings => {/* do something with the apartments! */})
+apartmentCrawler.crawlApartments(amount=2).then(allListings => { console.log(allListings) })
 ```
 ### Sample Output
 ```json

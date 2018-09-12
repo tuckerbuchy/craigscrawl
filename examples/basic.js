@@ -1,8 +1,8 @@
 const Nightmare = require('nightmare')
 const fs = require('fs')
 const util = require('util')
-const apartmentActions = require('./apartments/nightmareActions.js')
-const apartmentCrawler = require('./apartments/crawl.js')
+const apartmentActions = require('../apartments/nightmareActions.js')
+const apartmentCrawler = require('../apartments/crawl.js')
 
 function configureNightmare() {
   Nightmare.action('crawlApartmentsListPage', apartmentActions.crawlApartmentsListPage)
