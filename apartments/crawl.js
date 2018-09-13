@@ -22,11 +22,13 @@ function getApartmentsBatch(offset=0, limit=CL_APA_PAGINATION_SIZE) {
         listings = listings.splice(0, limit)
         listings.reduce(function(accumulator, listing) {
         return accumulator.then(function(accumulator) {
+          let listingPageData = {}
           return nightmare.goto(listing.url)
               .wait('body')
-              .extractApartmentGeospatialData()
-          .then((geo) => {
-            listing['geo'] = geo;
+              .extractApartmentPageData()
+          .then((data) => {
+            // Node way to merge two hash's
+            listing = Object.assign(listing, data);
           })
           .catch(error => {
             console.error('Geospatial crawl failed:', error)

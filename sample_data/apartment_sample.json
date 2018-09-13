@@ -1,167 +1,180 @@
 [
   {
-    "data_pid": "6686541764",
-    "post_datetime": "2018-09-10 22:21",
-    "price": "950",
-    "title": "ONE BEDROOM SUITE IN BURNABY",
-    "url": "https://vancouver.craigslist.ca/bnc/apa/d/one-bedroom-suite-in-burnaby/6686541764.html",
-    "geo": {
-      "lat": "49.229048",
-      "lon": "-122.918434"
-    }
-  },
-  {
-    "data_pid": "6694730140",
-    "post_datetime": "2018-09-10 22:20",
-    "price": "2800",
-    "title": "downtown apartment rent (west end)",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/downtown-apartment-rent-west/6694730140.html",
-    "geo": {
-      "lat": "49.277776",
-      "lon": "-123.131508"
-    }
-  },
-  {
-    "data_pid": "6691930028",
-    "post_datetime": "2018-09-10 22:18",
-    "price": "1625",
-    "title": "Large one bedroom with a balcony apartment near VGH",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/large-one-bedroom-with/6691930028.html",
-    "geo": {
-      "lat": "49.258543",
-      "lon": "-123.126801"
-    }
-  },
-  {
-    "data_pid": "6672454361",
-    "post_datetime": "2018-09-10 22:16",
+    "dataPid": "6687323663",
     "price": "3200",
-    "title": "Furnished 2 Bed 2 ba+den, newer condo in Mt Pleasant 3200/month",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/furnished-2-bed-2-baden-newer/6672454361.html",
+    "title": "4br - 2400ft2 - RICHMOND HOUSE FOR RENT $3200 (STEVESTON SOUTH)",
+    "url": "https://vancouver.craigslist.ca/rch/apa/d/4br-2400ft2-richmond-house/6687323663.html",
     "geo": {
-      "lat": "49.252847",
-      "lon": "-123.109937"
-    }
+      "lat": "49.127021",
+      "lon": "-123.173195"
+    },
+    "postedDate": "2018-09-02T10:22:00-0700",
+    "updatedDate": "2018-09-12T22:13:54-0700"
   },
   {
-    "data_pid": "6694729321",
-    "post_datetime": "2018-09-10 22:16",
+    "dataPid": "6686321681",
+    "price": "1200",
+    "title": "Sunny ground-level 2-bedroom Suite",
+    "url": "https://vancouver.craigslist.ca/rds/apa/d/sunny-ground-level-2-bedroom/6686321681.html",
+    "geo": {
+      "lat": "49.164617",
+      "lon": "-122.805948"
+    },
+    "postedDate": "2018-09-01T02:41:20-0700",
+    "updatedDate": "2018-09-12T22:12:23-0700"
+  },
+  {
+    "dataPid": "6686333098",
     "price": "1800",
-    "title": "2 BEDROOM BASEMENT SUITE - Avail. Nov. 1",
-    "url": "https://vancouver.craigslist.ca/nvn/apa/d/2-bedroom-basement-suite/6694729321.html",
+    "title": "Stylish brand new 2-bedroom condo for rent",
+    "url": "https://vancouver.craigslist.ca/rds/apa/d/stylish-brand-new-2-bedroom/6686333098.html",
     "geo": {
-      "lat": "49.318086",
-      "lon": "-123.001522"
-    }
+      "lat": "49.063279",
+      "lon": "-122.803860"
+    },
+    "postedDate": "2018-09-01T04:04:41-0700",
+    "updatedDate": "2018-09-12T22:12:14-0700"
   },
   {
-    "data_pid": "6694728937",
-    "post_datetime": "2018-09-10 22:14",
-    "price": "2300",
-    "title": "Telus Garden beautiful 1 bedroom",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/telus-garden-beautiful-1/6694728937.html",
+    "dataPid": "6673942342",
+    "price": "1800",
+    "title": "2 bedrooms basement suite in Arbutus",
+    "url": "https://vancouver.craigslist.ca/van/apa/d/2-bedrooms-basement-suite-in/6673942342.html",
     "geo": {
-      "lat": "49.279049",
-      "lon": "-123.119478"
-    }
+      "lat": "49.253841",
+      "lon": "-123.174604"
+    },
+    "postedDate": "2018-08-17T16:06:09-0700",
+    "updatedDate": "2018-09-12T22:11:16-0700"
   },
   {
-    "data_pid": "6681623951",
-    "post_datetime": "2018-09-10 22:14",
-    "price": "1700",
-    "title": "Large 2 bedroom suite. 45th Ave & Ross St. 1350 sf",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/large-2-bedroom-suite-45th/6681623951.html",
+    "dataPid": "6694565327",
+    "price": "2500",
+    "title": "Renovated Duplex near Schools, Metrotown Mall, Skytrain/Bus",
+    "url": "https://vancouver.craigslist.ca/bnc/apa/d/renovated-duplex-near-schools/6694565327.html",
     "geo": {
-      "lat": "49.229005",
-      "lon": "-123.082280"
-    }
+      "lat": "49.212803",
+      "lon": "-122.994947"
+    },
+    "postedDate": "2018-09-10T16:43:33-0700",
+    "updatedDate": "2018-09-12T22:09:08-0700"
   },
   {
-    "data_pid": "6690210803",
-    "post_datetime": "2018-09-10 22:14",
-    "price": "9000",
-    "title": "Unobstructed View Waterfront mansion 7 bedrooms 6 baths furnished",
-    "url": "https://vancouver.craigslist.ca/rds/apa/d/unobstructed-view-waterfront/6690210803.html",
+    "dataPid": "6696522297",
+    "price": "2150",
+    "title": "Live the Life",
+    "url": "https://vancouver.craigslist.ca/pml/apa/d/live-the-life/6696522297.html",
     "geo": {
-      "lat": "49.074231",
-      "lon": "-123.130131"
-    }
+      "lat": "49.173404",
+      "lon": "-122.508421"
+    },
+    "postedDate": "2018-09-12T22:09:16-0700",
+    "updatedDate": "2018-09-12T22:19:39-0700"
   },
   {
-    "data_pid": "6694728849",
-    "post_datetime": "2018-09-10 22:14",
-    "price": "2300",
-    "title": "3 Bedroom Upper Main Floor Suite in N. Burnaby (Hydro and Gas incld)",
-    "url": "https://vancouver.craigslist.ca/bnc/apa/d/3-bedroom-upper-main-floor/6694728849.html",
+    "dataPid": "6677578645",
+    "price": "2200",
+    "title": "One bedroom boutique townhome in Mount Pleasant E",
+    "url": "https://vancouver.craigslist.ca/van/apa/d/one-bedroom-boutique-townhome/6677578645.html",
     "geo": {
-      "lat": "49.276429",
-      "lon": "-123.001041"
-    }
+      "lat": "49.256562",
+      "lon": "-123.096211"
+    },
+    "postedDate": "2018-08-22T00:14:58-0700",
+    "updatedDate": "2018-09-12T22:07:50-0700"
   },
   {
-    "data_pid": "6694728006",
-    "post_datetime": "2018-09-10 22:13",
-    "price": "1690",
-    "title": "Few minutes to downtown INTERNATIONAL HOME-STUDENTS WELCOME",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/few-minutes-to-downtown/6694728006.html",
+    "dataPid": "6696522117",
+    "price": "980",
+    "title": "Utilities Included -Suite in House on South Slope",
+    "url": "https://vancouver.craigslist.ca/bnc/apa/d/utilities-included-suite-in/6696522117.html",
     "geo": {
-      "lat": "49.265143",
-      "lon": "-123.069251"
-    }
+      "lat": "49.208906",
+      "lon": "-122.979240"
+    },
+    "postedDate": "2018-09-12T22:08:36-0700",
+    "updatedDate": "2018-09-12T22:08:37-0700"
   },
   {
-    "data_pid": "6694728714",
-    "post_datetime": "2018-09-10 22:13",
-    "price": "2300",
-    "title": "3 Bedroom Upper Main Floor Suite in N. Burnaby (Hydro and Gas incld)",
-    "url": "https://vancouver.craigslist.ca/bnc/apa/d/3-bedroom-upper-main-floor/6694728714.html",
+    "dataPid": "6696521536",
+    "price": "1200",
+    "title": "Legal 1-Bedroom Independent Coach House",
+    "url": "https://vancouver.craigslist.ca/rds/apa/d/legal-1-bedroom-independent/6696521536.html",
     "geo": {
-      "lat": "49.276429",
-      "lon": "-123.001041"
-    }
+      "lat": "49.126213",
+      "lon": "-122.699046"
+    },
+    "postedDate": "2018-09-12T22:06:06-0700"
   },
   {
-    "data_pid": "6694728205",
-    "post_datetime": "2018-09-10 22:11",
-    "price": "1000",
-    "title": "1 Bedroom Suite w/laundry, Central Richmond",
-    "url": "https://vancouver.craigslist.ca/rch/apa/d/1-bedroom-suite-laundry/6694728205.html",
+    "dataPid": "6687658987",
+    "price": "1600",
+    "title": "Basement suite in Newly Built House",
+    "url": "https://vancouver.craigslist.ca/bnc/apa/d/basement-suite-in-newly-built/6687658987.html",
     "geo": {
-      "lat": "49.163971",
-      "lon": "-123.152854"
-    }
+      "lat": "49.229188",
+      "lon": "-122.945895"
+    },
+    "postedDate": "2018-09-02T18:16:26-0700",
+    "updatedDate": "2018-09-12T22:05:02-0700"
   },
   {
-    "data_pid": "6694727790",
-    "post_datetime": "2018-09-10 22:09",
-    "price": "2400",
-    "title": "Family Home in North Surrey For Rent - HUGE LOT (7,861) Sq.ft",
-    "url": "https://vancouver.craigslist.ca/rds/apa/d/family-home-in-north-surrey/6694727790.html",
+    "dataPid": "6696521492",
+    "price": "2550",
+    "title": "Spacious, Beautiful 3-Bedroom + Den House",
+    "url": "https://vancouver.craigslist.ca/rds/apa/d/spacious-beautiful-3-bedroom/6696521492.html",
     "geo": {
-      "lat": "49.036791",
-      "lon": "-122.777635"
-    }
+      "lat": "49.126269",
+      "lon": "-122.699175"
+    },
+    "postedDate": "2018-09-12T22:05:55-0700"
   },
   {
-    "data_pid": "6679257325",
-    "post_datetime": "2018-09-10 22:08",
-    "price": "1900",
-    "title": "Station Square Metrotown Burnaby",
-    "url": "https://vancouver.craigslist.ca/bnc/apa/d/station-square-metrotown/6679257325.html",
+    "dataPid": "6676529436",
+    "price": "2750",
+    "title": "Three Bedroom upstairs with Utilities Included",
+    "url": "https://vancouver.craigslist.ca/bnc/apa/d/three-bedroom-upstairs-with/6676529436.html",
     "geo": {
-      "lat": "49.229159",
-      "lon": "-123.002071"
-    }
+      "lat": "49.279525",
+      "lon": "-123.019096"
+    },
+    "postedDate": "2018-08-20T17:59:16-0700",
+    "updatedDate": "2018-09-12T22:03:33-0700"
   },
   {
-    "data_pid": "6680801991",
-    "post_datetime": "2018-09-10 22:08",
-    "price": "1550",
-    "title": "Vancouver E56th between Fraser & Knight 2 bedrooms &1.5baths",
-    "url": "https://vancouver.craigslist.ca/van/apa/d/vancouver-e56th-between/6680801991.html",
+    "dataPid": "6684577815",
+    "price": "3000",
+    "title": "Two Bedroom Apartment False Creek Olympic Village",
+    "url": "https://vancouver.craigslist.ca/van/apa/d/two-bedroom-apartment-false/6684577815.html",
     "geo": {
-      "lat": "49.218929",
-      "lon": "-123.087784"
-    }
+      "lat": "49.269330",
+      "lon": "-123.111364"
+    },
+    "postedDate": "2018-08-29T23:56:04-0700",
+    "updatedDate": "2018-09-12T22:03:29-0700"
+  },
+  {
+    "dataPid": "6694631023",
+    "price": "2900",
+    "title": "Beautiful Four Bedroom Townhouse Port Moody",
+    "url": "https://vancouver.craigslist.ca/pml/apa/d/beautiful-four-bedroom/6694631023.html",
+    "geo": {
+      "lat": "49.301318",
+      "lon": "-122.826644"
+    },
+    "postedDate": "2018-09-10T18:20:05-0700",
+    "updatedDate": "2018-09-12T22:03:23-0700"
+  },
+  {
+    "dataPid": "6676535410",
+    "price": "1800",
+    "title": "Brentwood Two Bedroom Air-Conditioned Suite",
+    "url": "https://vancouver.craigslist.ca/bnc/apa/d/brentwood-two-bedroom-air/6676535410.html",
+    "geo": {
+      "lat": "49.273951",
+      "lon": "-122.993647"
+    },
+    "postedDate": "2018-08-20T18:07:48-0700",
+    "updatedDate": "2018-09-12T22:03:15-0700"
   }
 ]

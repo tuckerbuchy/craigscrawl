@@ -11,18 +11,17 @@ module.exports = {
         }
 
         const listing = {
-          'data_pid': listingRow.getAttribute('data-pid'),
+          'dataPid': listingRow.getAttribute('data-pid'),
           'url': listingRow.querySelector('.result-title').href,
           'title': listingRow.querySelector('.result-title').innerText,
-          'price': price,
-          'post_datetime': listingRow.querySelector('.result-date').getAttribute('datetime')
+          'price': price
         }
         listings.push(listing);
       });
       return listings;
     }, done)
   },
-  extractApartmentGeospatialData: function(done){
+  extractApartmentPageData: function(done){
     this.evaluate_now(() => {
       const map = document.querySelector('#map');
       let lat = null;
@@ -37,7 +36,36 @@ module.exports = {
         'lat' : lat,
         'lon' : lon
       };
-      return geo;
+
+      let position;
+      let nodes = document.querySelectorAll('.postinginfo')
+      nodes.forEach( (n, i) => {
+        if (n.innerText.includes('posted: ')){
+          position = i;
+        };
+      });
+      let postedNode = nodes[position];
+
+      nodes = document.querySelectorAll('.postinginfo');
+
+      position = null;
+      nodes.forEach( (n, i) => {
+        if (n.innerText.includes('updated: ')){
+          position = i;
+        };
+      });
+      let updatedNode = nodes[position];
+
+      let postedDate;
+      if (postedNode) postedDate = postedNode.querySelector('time').getAttribute('datetime');
+      let updatedDate
+      if (updatedNode) updatedDate = updatedNode.querySelector('time').getAttribute('datetime');
+      
+      return {
+        geo,
+        postedDate,
+        updatedDate
+      };
     }, done)
   }
 }
