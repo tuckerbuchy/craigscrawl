@@ -6,7 +6,6 @@ const apartmentCrawler = require('../apartments/crawl.js')
 
 function configureNightmare() {
   Nightmare.action('crawlApartmentsListPage', apartmentActions.crawlApartmentsListPage)
-  Nightmare.action('extractApartmentGeospatialData', apartmentActions.extractApartmentGeospatialData)
   Nightmare.action('extractApartmentPageData', apartmentActions.extractApartmentPageData)
 }
 
