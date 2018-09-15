@@ -4,6 +4,18 @@ const apartmentActions = require('./nightmareActions.js')
 
 const CL_APA_PAGINATION_SIZE = 120; // TODO: Infer batch size from the first query.
 
+
+class ApartmentJob{
+  constructor(offset=0, limit=CL_APA_PAGINATION_SIZE, skip=1){
+    this.offset = offset;
+    this.limit = limit;
+    this.skip = skip;
+  }
+}
+
+function filterWithSkip(arr, skip){
+  return arr.filter((element, index) => { return index % skip === 0; })
+}
 const nightmare = Nightmare({ 
   show: true 
 })
@@ -13,35 +25,35 @@ function getApartmentsUrl(offset=0){
   return util.format(craigslistUrl, offset);
 }
 
-function getApartmentsBatch(offset=0, limit=CL_APA_PAGINATION_SIZE) {
+function getApartmentsBatch(apartmentJob) {
   return nightmare
-    .goto(getApartmentsUrl(offset=offset))
+    .goto(getApartmentsUrl(apartmentJob.offset))
     .crawlApartmentsListPage()
-    .then(listings => {
+    .then(apartments => {
       return new Promise((resolve, reject) => {
-        listings = listings.splice(0, limit)
-        listings.reduce(function(accumulator, listing) {
+        apartments = apartments.slice(0, apartmentJob.limit);
+        apartments = filterWithSkip(apartments, apartmentJob.skip);
+        apartments.reduce(function(accumulator, apartment) {
         return accumulator.then(function(accumulator) {
-          let listingPageData = {}
-          return nightmare.goto(listing.url)
+          return nightmare.goto(apartment.url)
               .wait('body')
               .extractApartmentPageData()
           .then((data) => {
             // Node way to merge two hash's
-            listing = Object.assign(listing, data);
+            apartment = Object.assign(apartment, data);
           })
           .catch(error => {
             console.error('Geospatial crawl failed:', error)
           });
         });
       }, Promise.resolve(true)).then(() => {
-          resolve(listings);
+          resolve(apartments);
       });
       })
     })
-    .then((listings) => {
+    .then((apartments) => {
       return nightmare.end().then(() => {
-        return Promise.resolve(listings)
+        return Promise.resolve(apartments)
       });
     })
     .catch(error => {
@@ -50,26 +62,22 @@ function getApartmentsBatch(offset=0, limit=CL_APA_PAGINATION_SIZE) {
 }
 
 module.exports = {
-  crawlApartments: function (amount){
+  crawlApartments: function (amount, skip){
     let n = 0;
-    let listingJobs = [];
+    let apartmentJobs = [];
     while (n < amount){
       let remaining = amount - n;
       let batchSize = remaining >= CL_APA_PAGINATION_SIZE ? CL_APA_PAGINATION_SIZE : remaining;
-      listingJob = {
-        url: getApartmentsUrl(n),
-        limit: batchSize,
-        offset: n
-      }
-      listingJobs.push(listingJob);
+      let apartmentJob = new ApartmentJob(n, batchSize, skip);
+      apartmentJobs.push(apartmentJob);
       n += batchSize;
     }
 
-    return listingJobs.reduce( ( promise, listingJob ) => {
-      return promise.then( (allListings) => {
-        console.log(util.format("Processing %s listings at %s", listingJob.limit, listingJob.offset));
-        return getApartmentsBatch(listingJob.offset, listingJob.limit)
-            .then((listings) => allListings = allListings.concat(listings))
+    return apartmentJobs.reduce( ( promise, apartmentJob ) => {
+      return promise.then( (allApartments) => {
+        console.log(util.format("On offset %s with limit=%s skip=%s", apartmentJob.offset, apartmentJob.limit, apartmentJob.skip));
+        return getApartmentsBatch(apartmentJob)
+            .then((newApartments) => allApartments = allApartments.concat(newApartments))
       })
     }, Promise.resolve([]));
   }
