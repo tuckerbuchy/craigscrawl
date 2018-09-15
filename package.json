@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tuckerbuchy/craigslist-analytics#readme",
   "dependencies": {
+    "aws-sdk": "^2.315.0",
     "cheerio": "^1.0.0-rc.2",
     "feedparser": "^2.2.9",
     "nightmare": "^3.0.1",

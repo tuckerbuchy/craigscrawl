@@ -6,7 +6,8 @@ const CL_APA_PAGINATION_SIZE = 120; // TODO: Infer batch size from the first que
 
 
 class ApartmentJob{
-  constructor(offset=0, limit=CL_APA_PAGINATION_SIZE, skip=1){
+  constructor(region, offset=0, limit=CL_APA_PAGINATION_SIZE, skip=1){
+    this.region = region;
     this.offset = offset;
     this.limit = limit;
     this.skip = skip;
@@ -20,14 +21,14 @@ const nightmare = Nightmare({
   show: true 
 })
 
-function getApartmentsUrl(offset=0){
-  const craigslistUrl = 'https://vancouver.craigslist.ca/d/apts-housing-for-rent/search/apa?s=%s';
-  return util.format(craigslistUrl, offset);
+function getApartmentsUrl(region, offset=0){
+  const craigslistUrl = 'https://%s.craigslist.ca/d/apts-housing-for-rent/search/apa?s=%s';
+  return util.format(craigslistUrl, region, offset);
 }
 
 function getApartmentsBatch(apartmentJob) {
   return nightmare
-    .goto(getApartmentsUrl(apartmentJob.offset))
+    .goto(getApartmentsUrl(region, apartmentJob.offset))
     .crawlApartmentsListPage()
     .then(apartments => {
       return new Promise((resolve, reject) => {
@@ -62,13 +63,13 @@ function getApartmentsBatch(apartmentJob) {
 }
 
 module.exports = {
-  crawlApartments: function (amount, skip){
+  crawlApartments: function (region, amount, skip){
     let n = 0;
     let apartmentJobs = [];
     while (n < amount){
       let remaining = amount - n;
       let batchSize = remaining >= CL_APA_PAGINATION_SIZE ? CL_APA_PAGINATION_SIZE : remaining;
-      let apartmentJob = new ApartmentJob(n, batchSize, skip);
+      let apartmentJob = new ApartmentJob(region, n, batchSize, skip);
       apartmentJobs.push(apartmentJob);
       n += batchSize;
     }
