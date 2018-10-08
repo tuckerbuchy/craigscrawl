@@ -2,6 +2,26 @@
 const AWS = require("aws-sdk");
 const rp = require('request-promise');
 const cheerio = require('cheerio');
+const NodeGeocoder = require('node-geocoder');
+
+async function getNeighbourhood(lat, lon) {
+    var options = {
+        provider: 'google',
+        // Optional depending on the providers
+        httpAdapter: 'https', // Default
+        apiKey: 'AIzaSyCdSlt2j86mYRTWMfAkFNTOduxrseGfxlw',
+        formatter: null         // 'gpx', 'string', ...
+    };
+
+    var geocoder = NodeGeocoder(options);
+    const res = await geocoder.reverse({lat:parseFloat(lat), lon:parseFloat(lon)});
+    let neighborhood = null;
+    if (res) {
+        const loc = res[0];
+        neighborhood = loc.extra.neighborhood;
+    }
+    return neighborhood;
+}
 
 function getGeoData($){
     const map = $('#map');
@@ -29,8 +49,9 @@ async function getPageData(url) {
         }
     };
     return rp(options)
-        .then(($) => {
+        .then(async ($) => {
             const geo = getGeoData($);
+            geo['neighborhood'] = await getNeighbourhood(geo.lat, geo.lon);
 
             let position;
             let nodes = $('.postinginfo')
@@ -80,11 +101,12 @@ function loadToDynamo(dataPid, extraData){
         Key:{
             "dataPid": dataPid
         },
-        UpdateExpression: "set latitude = :lat, longitude=:lon, postedDate=:postedDate, updatedDate=:updatedDate",
+        UpdateExpression: "set latitude = :lat, longitude=:lon, neighborhood=:neighborhood, postedDate=:postedDate, updatedDate=:updatedDate",
         ExpressionAttributeValues:{
             ":lat": extraData.geo.lat,
             ":lon": extraData.geo.lon,
-            ":postedDate": extraData.postedDate,
+            ":neighborhood": extraData.geo.neighborhood,
+            ":postedDate": Date(extraData.postedDate),
             ":updatedDate": extraData.updatedDate,
         }
     };

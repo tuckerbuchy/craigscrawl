@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/tuckerbuchy/craigslist-analytics#readme",
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "aws-sdk": "^2.315.0",
     "cheerio": "^1.0.0-rc.2",
+    "geocoder": "^0.2.3",
+    "node-geocoder": "^3.22.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   }
