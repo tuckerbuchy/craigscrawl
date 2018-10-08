@@ -19,9 +19,7 @@
   "dependencies": {
     "aws-sdk": "^2.315.0",
     "cheerio": "^1.0.0-rc.2",
-    "feedparser": "^2.2.9",
-    "nightmare": "^3.0.1",
     "request": "^2.88.0",
-    "vo": "^4.0.2"
+    "request-promise": "^4.2.2"
   }
 }

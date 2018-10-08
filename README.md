@@ -34,6 +34,6 @@ apartmentCrawler.crawlApartments(amount=2).then(allListings => { console.log(all
 
 ### Lambda deployment
 #### Zip it
-`zip -r craigscrawl.zip * -x '*electron/dist*'`
+zip -r craigscrawl.zip *
 #### Ship it
 aws s3 cp craigscrawl.zip s3://<yourbucket>
