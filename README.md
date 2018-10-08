@@ -1,9 +1,5 @@
 # Craigslist Crawler
 
-## Example 
-```node
-apartmentCrawler.crawlApartments(amount=2).then(allListings => { console.log(allListings) })
-```
 ### Sample Output
 ```json
 [
@@ -33,7 +29,6 @@ apartmentCrawler.crawlApartments(amount=2).then(allListings => { console.log(all
 ```
 
 ### Lambda deployment
-#### Zip it
-zip -r craigscrawl.zip *
-#### Ship it
-aws s3 cp craigscrawl.zip s3://<yourbucket>
+```
+npm run s3deploy
+```
