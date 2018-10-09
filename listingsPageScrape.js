@@ -9,7 +9,7 @@ async function getNeighbourhood(lat, lon) {
         provider: 'google',
         // Optional depending on the providers
         httpAdapter: 'https', // Default
-        apiKey: 'AIzaSyCdSlt2j86mYRTWMfAkFNTOduxrseGfxlw',
+        apiKey: '',
         formatter: null         // 'gpx', 'string', ...
     };
 
