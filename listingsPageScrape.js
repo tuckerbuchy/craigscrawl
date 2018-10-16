@@ -9,8 +9,7 @@ async function getNeighbourhood(lat, lon) {
         provider: 'google',
         // Optional depending on the providers
         httpAdapter: 'https', // Default
-        apiKey: '',
-        formatter: null         // 'gpx', 'string', ...
+        apiKey: process.env.GMAPS_API_KEY,
     };
 
     var geocoder = NodeGeocoder(options);
@@ -77,62 +76,19 @@ async function getPageData(url) {
             let updatedDate
             if (updatedNode) updatedDate = $(updatedNode).children('time').attr('datetime');
 
-            return {
+            const listingData = {
                 geo,
                 postedDate,
                 updatedDate
             };
+            console.log(listingData);
+            return listingData;
         })
         .catch((err) => {
             console.log(err);
         });
 }
 
-function loadToDynamo(dataPid, extraData){
-    // Set the region
-    AWS.config.update({region: 'us-east-1'});
-
-    // Create the DynamoDB service object
-    const docClient = new AWS.DynamoDB.DocumentClient();
-
-
-    var params = {
-        TableName: 'CraigslistApartments',
-        Key:{
-            "dataPid": dataPid
-        },
-        UpdateExpression: "set latitude = :lat, longitude=:lon, neighborhood=:neighborhood, postedDate=:postedDate, updatedDate=:updatedDate",
-        ExpressionAttributeValues:{
-            ":lat": extraData.geo.lat,
-            ":lon": extraData.geo.lon,
-            ":neighborhood": extraData.geo.neighborhood,
-            ":postedDate": Date(extraData.postedDate),
-            ":updatedDate": extraData.updatedDate,
-        }
-    };
-
-    console.log("Updating the item...");
-    docClient.update(params, function(err, data) {
-        if (err) {
-            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-        } else {
-            console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-        }
-    });
-}
-
 module.exports = {
-    listingsPageScrape: (event, context, callback) => {
-        event.Records.forEach(async (record) => {
-            console.log('Stream record: ', JSON.stringify(record, null, 2));
-
-            if (record.eventName == 'INSERT') {
-                let url = JSON.stringify(record.dynamodb.NewImage.url.S);
-                url = decodeURI(url).replace(/['"]+/g, '');
-                const pageData = await getPageData(url);
-                await loadToDynamo(record.dynamodb.NewImage.dataPid.S, pageData);
-            }
-        });
-        callback(null, `Successfully processed ${event.Records.length} records.`);
-    }
+    getPageData,
 };

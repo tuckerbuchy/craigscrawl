@@ -2,6 +2,7 @@ const AWS = require('aws-sdk');
 const util = require('util');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
+const { getPageData } = require('./listingsPageScrape');
 
 const CL_APA_PAGINATION_SIZE = 120; // TODO: Infer batch size from the first query.
 
@@ -82,6 +83,12 @@ async function crawlApartments (region, cityCode, amount, skip){
     }, Promise.resolve([]));
 }
 
+async function crawlEachApartmentPage (listings) {
+    return Promise.all(listings.map(async (item) => {
+        return {...item, ...getPageData(item.url)}
+    }));
+}
+
 function loadToDynamo(listings){
     // Set the region
     AWS.config.update({region: 'us-east-1'});
@@ -105,10 +112,17 @@ function loadToDynamo(listings){
     }, Promise.resolve());
 }
 
-module.exports = {
-    listingsUrlScrape: ( async (event, context) => {
-        console.log(util.format("Doing with REGION=%s, CITY_CODE=%s, AMOUNT=%s, SKIP=%s", process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP));
-        const listings = await crawlApartments(process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP);
-        await loadToDynamo(listings)
-    })
-};
+async function performCraigslistCrawl() {
+    console.log(util.format("Doing with REGION=%s, CITY_CODE=%s, AMOUNT=%s, SKIP=%s", process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP));
+    let listings = await crawlApartments(process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP);
+    listings = await crawlEachApartmentPage(listings);
+    try {
+        await loadToDynamo(listings);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+if (require.main === module) {
+    performCraigslistCrawl();
+}
