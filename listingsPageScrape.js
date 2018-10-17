@@ -33,8 +33,8 @@ function getGeoData($){
     }
 
     const geo = {
-        'lat' : lat,
-        'lon' : lon
+        'lat' : Number(lat),
+        'lon' : Number(lon)
     };
 
     return geo;
@@ -52,7 +52,7 @@ async function getPageData(url) {
             const geo = getGeoData($);
             geo['neighborhood'] = await getNeighbourhood(geo.lat, geo.lon);
 
-            let position;
+            let position = null;
             let nodes = $('.postinginfo')
             nodes.each( (i, n) => {
                 if ($(n).text().includes('posted: ')){
@@ -77,7 +77,7 @@ async function getPageData(url) {
             if (updatedNode) updatedDate = $(updatedNode).children('time').attr('datetime');
 
             const listingData = {
-                geo,
+                ...geo,
                 postedDate,
                 updatedDate
             };

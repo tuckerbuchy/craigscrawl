@@ -84,8 +84,10 @@ async function crawlApartments (region, cityCode, amount, skip){
 }
 
 async function crawlEachApartmentPage (listings) {
+    console.log("Crawling..");
     return Promise.all(listings.map(async (item) => {
-        return {...item, ...getPageData(item.url)}
+        const newData = await getPageData(item.url);
+        return {...item, ...newData};
     }));
 }
 
@@ -97,6 +99,7 @@ function loadToDynamo(listings){
     docClient = new AWS.DynamoDB.DocumentClient();
 
     return listings.reduce( ( promise, listing ) => {
+        console.log(listing);
         var params = {
             TableName: 'CraigslistApartments',
             Item: listing,
@@ -114,15 +117,18 @@ function loadToDynamo(listings){
 
 async function performCraigslistCrawl() {
     console.log(util.format("Doing with REGION=%s, CITY_CODE=%s, AMOUNT=%s, SKIP=%s", process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP));
-    let listings = await crawlApartments(process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP);
-    listings = await crawlEachApartmentPage(listings);
-    try {
-        await loadToDynamo(listings);
-    } catch (e) {
-        console.log(e);
-    }
+    crawlApartments(process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP)
+        .then(listings => {
+            return crawlEachApartmentPage(listings);
+        })
+        .then(listings => {
+            loadToDynamo(listings)
+        });
 }
-
-if (require.main === module) {
+exports.handler = function(event, context, callback) {
     performCraigslistCrawl();
-}
+};
+
+// if (require.main === module) {
+//     performCraigslistCrawl();
+// }
