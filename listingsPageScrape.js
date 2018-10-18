@@ -49,9 +49,17 @@ async function getPageData(url) {
     };
     return rp(options)
         .then(async ($) => {
+            // GEOGRAPHICAL
             const geo = getGeoData($);
             geo['neighborhood'] = await getNeighbourhood(geo.lat, geo.lon);
 
+            // EXTRA TAGS
+            let tags = [];
+            $('div.mapAndAttrs .attrgroup span').each( (i, n) => {
+                tags.push($(n).text())
+            });
+
+            // LAST POSTED
             let position = null;
             let nodes = $('.postinginfo')
             nodes.each( (i, n) => {
@@ -79,7 +87,8 @@ async function getPageData(url) {
             const listingData = {
                 ...geo,
                 postedDate,
-                updatedDate
+                updatedDate,
+                tags
             };
             console.log(listingData);
             return listingData;
