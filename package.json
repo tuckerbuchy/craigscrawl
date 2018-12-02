@@ -22,8 +22,11 @@
     "@google/maps": "^0.5.5",
     "aws-sdk": "^2.315.0",
     "cheerio": "^1.0.0-rc.2",
+    "d3": "^5.7.0",
+    "d3-geo": "^1.11.3",
     "geocoder": "^0.2.3",
     "node-geocoder": "^3.22.0",
+    "point-in-geopolygon": "^1.0.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   }

@@ -2,12 +2,14 @@ const AWS = require('aws-sdk');
 const util = require('util');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const { getPageData } = require('./listingsPageScrape');
+const {
+    getPageData
+} = require('./listingsPageScrape');
 
 const CL_APA_PAGINATION_SIZE = 120; // TODO: Infer batch size from the first query.
 
-class ApartmentJob{
-    constructor(region, cityCode, offset=0, limit=CL_APA_PAGINATION_SIZE, skip=1){
+class ApartmentJob {
+    constructor(region, cityCode, offset = 0, limit = CL_APA_PAGINATION_SIZE, skip = 1) {
         this.region = region;
         this.cityCode = cityCode;
         this.offset = offset;
@@ -16,19 +18,21 @@ class ApartmentJob{
     }
 }
 
-function filterWithSkip(arr, skip){
-    return arr.filter((element, index) => { return index % skip === 0; })
+function filterWithSkip(arr, skip) {
+    return arr.filter((element, index) => {
+        return index % skip === 0;
+    })
 }
 
-function getApartmentsUrl(region, cityCode, offset=0){
+function getApartmentsUrl(region, cityCode, offset = 0) {
     const craigslistUrl = 'https://%s.craigslist.ca/d/apts-housing-for-rent/search/%s/apa?s=%s';
     return util.format(craigslistUrl, region, cityCode, offset);
 }
 
-function getApartmentsList(apartmentJob){
+function getApartmentsList(apartmentJob) {
     const options = {
         uri: getApartmentsUrl(apartmentJob.region, apartmentJob.cityCode, apartmentJob.offset),
-        transform: function (body) {
+        transform: function(body) {
             return cheerio.load(body);
         }
     };
@@ -64,18 +68,18 @@ function getApartmentsList(apartmentJob){
         });
 }
 
-async function crawlApartments (region, cityCode, amount, skip){
+async function crawlApartments(region, cityCode, amount, skip) {
     let n = 0;
     let apartmentJobs = [];
-    while (n < amount){
+    while (n < amount) {
         let remaining = amount - n;
         let batchSize = remaining >= CL_APA_PAGINATION_SIZE ? CL_APA_PAGINATION_SIZE : remaining;
         let apartmentJob = new ApartmentJob(region, cityCode, n, batchSize, skip);
         apartmentJobs.push(apartmentJob);
         n += batchSize;
     }
-    return apartmentJobs.reduce( ( promise, apartmentJob ) => {
-        return promise.then( (allApartments) => {
+    return apartmentJobs.reduce((promise, apartmentJob) => {
+        return promise.then((allApartments) => {
             console.log(util.format("On offset %s with limit=%s skip=%s", apartmentJob.offset, apartmentJob.limit, apartmentJob.skip));
             return getApartmentsList(apartmentJob)
                 .then((newApartments) => allApartments = allApartments.concat(newApartments))
@@ -83,30 +87,40 @@ async function crawlApartments (region, cityCode, amount, skip){
     }, Promise.resolve([]));
 }
 
-async function crawlEachApartmentPage (listings) {
+async function crawlEachApartmentPage(listings) {
     console.log("Crawling..");
-    return Promise.all(listings.map(async (item) => {
+    return Promise.all(listings.map(async(item) => {
         const newData = await getPageData(item.url);
-        return {...item, ...newData};
+        return {...item,
+            ...newData
+        };
     }));
 }
 
-function loadToDynamo(listings){
+function validListing(listing) {
+  return listing['price'] && listing['neighborhood'];
+}
+
+function loadToDynamo(listings) {
     // Set the region
-    AWS.config.update({region: 'us-east-1'});
+    AWS.config.update({
+        region: 'us-east-1'
+    });
 
     // Create the DynamoDB service object
     docClient = new AWS.DynamoDB.DocumentClient();
 
-    return listings.reduce( ( promise, listing ) => {
+    return listings
+      .filter(listing => validListing(listing))
+      .reduce((promise, listing) => {
         console.log(listing);
         var params = {
             TableName: 'CraigslistApartments',
             Item: listing,
         };
-        return promise.then( () => {
+        return promise.then(() => {
             return new Promise((resolve, reject) => {
-                docClient.put(params, function(err, data){
+                docClient.put(params, function(err, data) {
                     if (err) reject(err);
                     else resolve(data);
                 });
@@ -115,9 +129,9 @@ function loadToDynamo(listings){
     }, Promise.resolve());
 }
 
-async function performCraigslistCrawl() {
-    console.log(util.format("Doing with REGION=%s, CITY_CODE=%s, AMOUNT=%s, SKIP=%s", process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP));
-    crawlApartments(process.env.REGION, process.env.CITY_CODE, process.env.AMOUNT, process.env.SKIP)
+async function performCraigslistCrawl(region = process.env.REGION, city_code = process.env.CITY_CODE, amount = process.env.AMOUNT, skip = process.env.SKIP) {
+    console.log(util.format("Doing with REGION=%s, CITY_CODE=%s, AMOUNT=%s, SKIP=%s", region, city_code, amount, skip));
+    crawlApartments(region, city_code, amount, skip)
         .then(listings => {
             return crawlEachApartmentPage(listings);
         })
@@ -129,6 +143,6 @@ exports.handler = function(event, context, callback) {
     performCraigslistCrawl();
 };
 
-// if (require.main === module) {
-//     performCraigslistCrawl();
-// }
+if (require.main === module) {
+    performCraigslistCrawl('vancouver', 'van', 200, 2);
+}
