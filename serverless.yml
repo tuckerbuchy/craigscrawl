@@ -1,0 +1,57 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: serverless-craigscrawl
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs8.10
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+resources:  # CloudFormation template syntax
+  Resources:
+    ApartmentListings:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: apartmentListings
+        AttributeDefinitions:
+          - AttributeName: dataPid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: dataPid
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+          
+# The `functions` block defines what code to deploy
+functions:
+  crawlApartments:
+    handler: listingsUrlScrape.handler
+    timeout: 60
+    memorySize: 256
+    environment:
+      AMOUNT: 200
+      CITY_CODE: van
+      REGION: vancouver
+      SKIP: 1
+    events:
+      - schedule:
+        name: apartment-daily-crawl
+        description: 'Crawls apartments daily to pump to Dynamodb.' 
+        rate: cron(0 16 ? * * *)
+        enabled: true

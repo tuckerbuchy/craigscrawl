@@ -31,12 +31,13 @@ async function getNeighbourhoodGoogle(lat, lon) {
 
 function findNeighborhood(lat, lon, neighborhoods) {
     const neighborhood = neighborhoods.features.find((f) => {
-      return d3.geoContains(f, [lon, lat]);
+        return d3.geoContains(f, [lon, lat]);
     });
+    
     if (neighborhood) {
-      return neighborhood['properties']['name'] 
+        return neighborhood['properties']['name']
     } else {
-      return null;
+        return null;
     }
 }
 

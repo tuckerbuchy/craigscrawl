@@ -115,7 +115,7 @@ function loadToDynamo(listings) {
       .reduce((promise, listing) => {
         console.log(listing);
         var params = {
-            TableName: 'CraigslistApartments',
+            TableName: 'apartmentListings',
             Item: listing,
         };
         return promise.then(() => {
