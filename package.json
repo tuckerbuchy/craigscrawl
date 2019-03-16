@@ -28,6 +28,10 @@
     "node-geocoder": "^3.22.0",
     "point-in-geopolygon": "^1.0.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "serverless": "^1.38.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^4.9.1"
   }
 }

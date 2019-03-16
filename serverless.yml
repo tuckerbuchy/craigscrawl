@@ -6,7 +6,8 @@
 
 # The `service` block is the name of the service
 service: serverless-craigscrawl
-
+plugins:
+  - serverless-offline
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
@@ -40,6 +41,10 @@ resources:  # CloudFormation template syntax
           
 # The `functions` block defines what code to deploy
 functions:
+  getListings:
+    handler: listingsApi.get
+    events:
+      - http: GET listings
   crawlApartments:
     handler: listingsUrlScrape.handler
     timeout: 60
@@ -51,7 +56,12 @@ functions:
       SKIP: 1
     events:
       - schedule:
-        name: apartment-daily-crawl
-        description: 'Crawls apartments daily to pump to Dynamodb.' 
-        rate: cron(0 16 ? * * *)
-        enabled: true
+          name: apartment-evening-crawl
+          description: 'Crawls apartments daily to pump to Dynamodb.' 
+          rate: cron(0 16 ? * * *)
+          enabled: true
+      - schedule:
+          name: apartment-morning-crawl
+          description: 'Crawls apartments daily to pump to Dynamodb.' 
+          rate: cron(0 4 ? * * *)
+          enabled: true
