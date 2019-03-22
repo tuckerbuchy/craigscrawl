@@ -101,7 +101,13 @@ function validListing(listing) {
   return listing['price'] && listing['neighborhood'];
 }
 
-function loadToDynamo(listings) {
+function computeTtl(daysTillExpiry) {
+  const SECONDS_IN_AN_DAY = 60 * 60 * 24;
+  const secondsSinceEpoch = Math.round(Date.now() / 1000);
+  return secondsSinceEpoch + SECONDS_IN_AN_DAY;
+}
+
+function loadToDynamo(listings, daysTillExpiry) {
     // Set the region
     AWS.config.update({
         region: 'us-east-1'
@@ -113,6 +119,7 @@ function loadToDynamo(listings) {
     return listings
       .filter(listing => validListing(listing))
       .reduce((promise, listing) => {
+        listing['ttl'] = computeTtl(daysTillExpiry);
         console.log(listing);
         var params = {
             TableName: 'apartmentListings',
@@ -136,7 +143,7 @@ async function performCraigslistCrawl(region = process.env.REGION, city_code = p
             return crawlEachApartmentPage(listings);
         })
         .then(listings => {
-            loadToDynamo(listings)
+            loadToDynamo(listings, process.env.DAYS_TILL_EXPIRY)
         });
 }
 exports.handler = function(event, context, callback) {

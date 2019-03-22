@@ -7,6 +7,7 @@ var inside = require('point-in-geopolygon');
 var d3 = require("d3");
 
 const vancouver = require('./vancouver');
+const { extractInfoFromTags } = require('./tags');
 
 async function getNeighbourhoodGoogle(lat, lon) {
     var options = {
@@ -59,6 +60,8 @@ function getGeoData($) {
     return geo;
 }
 
+
+
 async function getPageData(url) {
     const options = {
         uri: url,
@@ -78,6 +81,8 @@ async function getPageData(url) {
             $('div.mapAndAttrs .attrgroup span').each((i, n) => {
                 tags.push($(n).text())
             });
+
+            let tagInfo = extractInfoFromTags(tags);
 
             // LAST POSTED
             let position = null;
@@ -108,9 +113,9 @@ async function getPageData(url) {
                 ...geo,
                 postedDate,
                 updatedDate,
-                tags
+                tags,
+                ...tagInfo
             };
-            console.log(listingData);
             return listingData;
         })
         .catch((err) => {

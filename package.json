@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "scrape": "node listingsUrlScrape.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "s3deploy": "sh ./deploy.sh"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/tuckerbuchy/craigslist-analytics#readme",
   "dependencies": {
     "@google/maps": "^0.5.5",
+    "athena-express": "^4.0.2",
     "aws-sdk": "^2.315.0",
     "cheerio": "^1.0.0-rc.2",
     "d3": "^5.7.0",
@@ -32,6 +33,8 @@
     "serverless": "^1.38.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
     "serverless-offline": "^4.9.1"
   }
 }

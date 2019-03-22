@@ -37,6 +37,9 @@ resources:  # CloudFormation template syntax
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
 
           
 # The `functions` block defines what code to deploy
@@ -45,6 +48,10 @@ functions:
     handler: listingsApi.get
     events:
       - http: GET listings
+  averageRent:
+    handler: listingsApi.getAverageRent
+    events:
+      - http: GET averageRent
   crawlApartments:
     handler: listingsUrlScrape.handler
     timeout: 60
@@ -54,6 +61,7 @@ functions:
       CITY_CODE: van
       REGION: vancouver
       SKIP: 1
+      DAYS_TILL_EXPIRY: 7
     events:
       - schedule:
           name: apartment-evening-crawl
