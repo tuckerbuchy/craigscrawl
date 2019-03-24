@@ -21,7 +21,20 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
+      Resource:
+        Fn::GetAtt:
+          - ApartmentListings
+          - Arn
+    - Effect: Allow
+      Action:
+        - "athena:*"
+        - "glue:GetUserDefinedFunction"
+        - "glue:GetTable"
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - "s3:*"
+      Resource: "arn:aws:s3:::athena-express*"
 resources:  # CloudFormation template syntax
   Resources:
     ApartmentListings:
@@ -44,14 +57,22 @@ resources:  # CloudFormation template syntax
           
 # The `functions` block defines what code to deploy
 functions:
-  getListings:
-    handler: listingsApi.get
-    events:
-      - http: GET listings
   averageRent:
     handler: listingsApi.getAverageRent
     events:
-      - http: GET averageRent
+      - http: 
+          path: averageRent
+          method: get
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                minBedrooms: false
+                maxBedrooms: false
+                dogs: false
+                cats: false
+                minFt2: false
+                maxFt2: false
   crawlApartments:
     handler: listingsUrlScrape.handler
     timeout: 60
