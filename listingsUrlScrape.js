@@ -104,7 +104,7 @@ function validListing(listing) {
 function computeTtl(daysTillExpiry) {
   const SECONDS_IN_AN_DAY = 60 * 60 * 24;
   const secondsSinceEpoch = Math.round(Date.now() / 1000);
-  return secondsSinceEpoch + SECONDS_IN_AN_DAY;
+  return secondsSinceEpoch + SECONDS_IN_AN_DAY * daysTillExpiry;
 }
 
 function loadToDynamo(listings, daysTillExpiry) {

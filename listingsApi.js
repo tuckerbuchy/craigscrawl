@@ -20,6 +20,18 @@ async function getListings(event, context, callback) {
   });
 }
 
+function formatPostedDateField() {
+  return 'Date(from_iso8601_timestamp(posteddate))'
+}
+
+function formatPostDateValue(date) {
+  if (!Date.parse(date)){
+    throw new Error("Invalid date!!!");
+  };
+
+  return `Date('${date}')`
+}
+
 function buildQuery(queryParams) {
   let wheres = [];
   if (queryParams) {
@@ -54,6 +66,8 @@ function buildQuery(queryParams) {
         case 'maxFt2':
           if (queryParams[param]) wheres.push({field: 'ft2', operator: '<=', value: parseInt(queryParams[param])})
           break;
+        case 'startDate':
+          if (queryParams[param]) wheres.push({field: formatPostedDateField(), operator: '>=', value: formatPostDateValue(queryParams[param])})
       }
     });
   }

@@ -73,6 +73,7 @@ functions:
                 cats: false
                 minFt2: false
                 maxFt2: false
+                startDate: false
   crawlApartments:
     handler: listingsUrlScrape.handler
     timeout: 60
