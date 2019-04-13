@@ -71,7 +71,7 @@ function buildQuery(queryParams) {
       }
     });
   }
-  let queryString = "select neighborhood, avg(price) as averageRent, count(*) as numberRecords from apartments.apartment_listings";
+  let queryString = "select neighborhood, approx_percentile(price, 0.5) as averageRent, count(*) as numberRecords from apartments.apartment_listings";
   if (wheres.length){
     queryString += " where " + wheres.map((w)=>[w.field, w.operator, w.value].join(' ')).join(' AND ');
   }
